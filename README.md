@@ -1,18 +1,18 @@
 **Table of Contents**
 
-1. Project Name
-2. Project Background
-3. Project Goals
-4. Data Structure & Initial Checks
-5. Executive Summary
+1. [Project Name](#project-name)
+2. [Project Background](#project-background)
+3. [Project Goals](#project-goals)
+4. [Data Structure & Initial Checks](#data-structure--initial-checks)
+5. [Executive Summary](#executive-summary)
 6. Insights Deep Dive
-   - Category 1: Sales Performance by Region
-   - Category 2: Product Performance Analysis
-   - Category 3: Sales Channel Insights
-   - Category 4: Profitability Analysis
-7. Recommendations
-8. Technical Details
-9. Assumptions and Caveats
+   - [Category 1: Sales Performance by Region](#category-1-sales-performance-by-region)
+   - [Category 2: Product Performance Analysis](#category-2-product-performance-analysis)
+   - [Category 3: Sales Channel Insights](#category-3-sales-channel-insights)
+   - [Category 4: Profitability Analysis](#category-4-profitability-analysis)
+7. [Recommendations](#recommendations)
+8. [Technical Details](#technical-details)
+9. [Assumptions and Caveats](#assumptions-and-caveats)
 
 ---
 
