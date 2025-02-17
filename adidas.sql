@@ -65,14 +65,6 @@ SET
     `Operating Margin` = REPLACE(`Operating Margin`, '%', '');
 
 
-
-ALTER TABLE adidas
-CHANGE COLUMN `Price per Unit` Unit_price INT,
-CHANGE COLUMN `Units Sold` SOLD_UNITS INT,
-CHANGE COLUMN `Total Sales` TOTAL_SOLD INT,
-CHANGE COLUMN `Operating Profit` PROFIT INT;
-
-
  -- Finding duplicates
 SELECT 
 `Invoice Date` , `Retailer ID` ,Region,State,City, `Product`, `Price per Unit` , `Units Sold` , `Total Sales` , `Operating Profit` , `Operating Margin` , `Sales Method`,
@@ -80,6 +72,30 @@ COUNT(*) AS ROW_NUM
 FROM adidas
 GROUP BY `Invoice Date` , `Retailer ID` ,Region,State,City, `Product`, `Price per Unit` , `Units Sold` , `Total Sales` , `Operating Profit` , `Operating Margin` , `Sales Method`
 HAVING ROW_NUM > 1;
+
+
+-- total profit
+SELECT 
+ROUND(SUM(`Operating Margin`),2) AS Total_profit 
+FROM adidas;
+
+-- total revenue
+SELECT 
+ROUND(SUM(`Total Sales`),2) AS Total_sales 
+FROM adidas;
+-- total transactions count
+SELECT 
+COUNT(`Invoice Date`) AS Count_transactions 
+FROM adidas;
+-- start and end of invoice
+SELECT 
+MIN(`Invoice Date`) AS Start_date ,
+MAX(`Invoice Date`) AS end_date
+FROM adidas;
+-- avg profit
+SELECT 
+ROUND(AVG(`Operating Margin`),2) AS AVERAGE_profit 
+FROM adidas;
 
 -- Total reveue by Sales Method
 SELECT `SALES METHOD` , 
