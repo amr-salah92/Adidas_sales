@@ -54,8 +54,8 @@ The analysis reveals key insights into Adidas' sales performance:
 
 1. The **West region** generated the highest revenue, accounting for 30% of total sales, followed by the Northeast region with 21%.
 2. **Men’s Athletic Footwear** was the best-selling product, contributing 30% of total units sold.
-3. **In-store sales** accounted for 40% of total revenue, highlighting the importance of physical retail channels.
-4. Profitability varied significantly by product category, with **Men Street Footwear achieving the highest operating margin (45%)**.
+3. **Online sales** accounted for 39% of total revenue, highlighting the importance of physical retail channels.
+4. Profitability varied significantly by product category, with **Men Street Footwear achieving the highest operating margin (40%)**.
 
 ---
 
@@ -70,20 +70,19 @@ The analysis reveals key insights into Adidas' sales performance:
 **Category 2: Product Performance Analysis**
 
 - Men’s Athletic Footwear had the highest sales volume (593 K units).
-- Women’s Street Footwear had a lower sales volume but third higher average margin.
-- Apparel products exhibited seasonal demand spikes. 
+- Women’s Street Footwear had a lower sales volume but third higher average profit margin.
+- best-selling months (April, July, December) with revenue changes greater than 25% compared to the previous month. 
 
 **Category 3: Sales Channel Insights**
 
 - In-store sales were dominant, accounting for 40% of total revenue.
-- Online sales showed a steady increase throughout the year, peaking in Q3.
-- Retailers with strong digital platforms had higher customer retention rates.
+- Online sales showed a steady increase throughout the year, peaking in Q2 - 2021 (months 5 , 6).
+
 
 **Category 4: Profitability Analysis**
 
-- Men Street Footwear products had the highest Average profit margins (45%) compared to men athlete footwear (40%).
-- Discounts on Men’s Street Footwear impacted profit margins in Q3.
-- The highest profit-generating region was the West.
+- Men Street Footwear products had the highest Average profit margins (40%) compared to men athlete footwear (34%).
+- The highest profit-generating region was the South 42%.
 
 ---
 ![Screenshot_16-2-2025_195421_chatgpt com](https://github.com/user-attachments/assets/fc8354fd-ae0d-457d-90eb-c361e689f6a2)
