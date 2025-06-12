@@ -5,7 +5,7 @@
 3. [Project Goals](#project-goals)
 4. [Data Structure & Initial Checks](#data-structure--initial-checks)
 5. [Executive Summary](#executive-summary)
-6. Insights Deep Dive
+6. [Insights Deep Dive](#Insights-Deep-Dive)
    - [Category 1: Sales Performance by Region](#category-1-sales-performance-by-region)
    - [Category 2: Product Performance Analysis](#category-2-product-performance-analysis)
    - [Category 3: Sales Channel Insights](#category-3-sales-channel-insights)
