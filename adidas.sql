@@ -1,46 +1,48 @@
 /*
+===============================================
 ADIDAS SALES ANALYSIS PROJECT
+===============================================
 
-This project analyzes Adidas' sales data to uncover business insights, including:
-- Sales performance metrics (revenue, profit, transaction volume)
-- Regional and state-level sales breakdowns
-- Product performance across sales channels
-- Temporal sales trends (monthly/yearly)
-- Data quality assurance and cleaning
+This project analyzes Adidas' sales data to extract valuable business insights:
+- Sales performance metrics: revenue, profit, transaction volume
+- Regional and state-level sales contributions
+- Product performance by channel and geography
+- Temporal sales trends (monthly, yearly)
+- Data quality checks and cleaning
 
-Key components:
+Major stages of analysis:
 1. Data exploration and quality checks
 2. Data cleaning and standardization
-3. Core business metrics calculation
+3. Metric computation
 4. Multidimensional performance analysis
-5. Ranking and trend analysis
+5. Trend and ranking reports
 */
 
--- ###############
--- # DATA SETUP #
--- ###############
+-- ===================
+-- DATABASE SETUP
+-- ===================
 USE adidas;
 
--- Disable safe update mode for bulk operations
+-- Disable safe update mode for cleaning operations
 SET SQL_SAFE_UPDATES = 0;
 
--- #####################
--- # DATA EXPLORATION #
--- #####################
+-- ==========================
+-- 1. DATA EXPLORATION
+-- ==========================
 
--- Initial data inspection
+-- Preview dataset
 SELECT * FROM adidas LIMIT 5;
 
--- Verify column data types
+-- Inspect data types
 SELECT COLUMN_NAME, DATA_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_SCHEMA = 'adidas' AND TABLE_NAME = 'adidas';
 
--- ####################
--- # DATA QUALITY CHECKS #
--- ####################
+-- ===================================
+-- 2. DATA QUALITY & VALIDATION CHECKS
+-- ===================================
 
--- Check for data consistency in categorical columns
+-- Check distinct values in categorical columns
 SELECT DISTINCT(Retailer) FROM adidas;
 SELECT DISTINCT(Region) FROM adidas;
 SELECT DISTINCT(State) FROM adidas;
@@ -48,21 +50,21 @@ SELECT DISTINCT(City) FROM adidas;
 SELECT DISTINCT(Product) FROM adidas;
 SELECT DISTINCT(`Sales Method`) FROM adidas;
 
--- Validate numeric field formats
+-- Validate numeric fields for formatting issues
 SELECT `Units Sold` FROM adidas WHERE `Units Sold` NOT REGEXP '^[0-9]+$';
 SELECT `Total Sales` FROM adidas WHERE `Total Sales` NOT REGEXP '^[0-9]+$';
 SELECT `Price per Unit` FROM adidas WHERE `Price per Unit` NOT REGEXP '^[0-9]+$';
 SELECT `Operating Profit` FROM adidas WHERE `Operating Profit` NOT REGEXP '^[0-9]+$';
 
--- ################
--- # DATA CLEANING #
--- ################
+-- =====================
+-- 3. DATA CLEANING
+-- =====================
 
--- Standardize numeric formats
+-- Standardize and clean numeric fields
 UPDATE adidas
 SET 
     `Price per Unit` = REPLACE(`Price per Unit`, '$', ''),
-    `Price per Unit` = REPLACE(`Price per Unit`, '.', '')/100,  -- Convert to decimal
+    `Price per Unit` = REPLACE(`Price per Unit`, '.', '')/100,
     `Total Sales` = REPLACE(`Total Sales`, '$', ''),
     `Operating Profit` = REPLACE(`Operating Profit`, '$', ''),
     `Units Sold` = REPLACE(`Units Sold`, ',', ''),
@@ -70,11 +72,11 @@ SET
     `Operating Profit` = REPLACE(`Operating Profit`, ',', ''),
     `Operating Margin` = REPLACE(`Operating Margin`, '%', '');
 
--- #########################
--- # DUPLICATE IDENTIFICATION #
--- #########################
+-- ===============================
+-- 4. DUPLICATE RECORD IDENTIFIER
+-- ===============================
 
--- Find duplicate transactions
+-- Identify duplicate transactions
 SELECT 
     `Invoice Date`, `Retailer ID`, Region, State, City, Product, 
     `Price per Unit`, `Units Sold`, `Total Sales`, `Operating Profit`, 
@@ -87,172 +89,250 @@ GROUP BY
     `Operating Margin`, `Sales Method`
 HAVING ROW_NUM > 1;
 
--- ##############################
--- # CORE BUSINESS METRICS #
--- ##############################
+-- =============================
+-- 5. CORE BUSINESS METRICS
+-- =============================
 
--- Total Profit Calculation
-SELECT ROUND(SUM(`Operating Margin`),2) AS Total_profit FROM adidas;
+-- Total profit
+SELECT ROUND(SUM(`Operating Margin`), 2) AS Total_profit FROM adidas;
 
--- Total Revenue Calculation
-SELECT ROUND(SUM(`Total Sales`),2) AS Total_sales FROM adidas;
+-- Total sales (revenue)
+SELECT ROUND(SUM(`Total Sales`), 2) AS Total_sales FROM adidas;
 
--- Transaction Volume Analysis
+-- Number of transactions
 SELECT COUNT(`Invoice Date`) AS Count_transactions FROM adidas;
 
--- Sales Date Range
+-- Date range of sales
 SELECT 
     MIN(`Invoice Date`) AS Start_date,
-    MAX(`Invoice Date`) AS end_date
+    MAX(`Invoice Date`) AS End_date
 FROM adidas;
 
--- Average Profit Margin
-SELECT ROUND(AVG(`Operating Margin`),2) AS AVERAGE_profit FROM adidas;
+-- Average profit margin
+SELECT ROUND(AVG(`Operating Margin`), 2) AS Average_profit FROM adidas;
 
--- ############################
--- # SALES CHANNEL ANALYSIS #
--- ############################
+-- ================================
+-- 6. SALES CHANNEL PERFORMANCE
+-- ================================
 
--- Sales Method Performance
+-- Summary by Sales Method
 SELECT 
-    `SALES METHOD`,
-    COUNT(*) AS NUM_ORDERS,
-    ROUND(AVG(`Operating Margin`),2) AS AVG_PROFIT,
-    SUM(`Operating Profit`) AS PROFIT,
-    SUM(`TOTAL SALES`) AS REVENUE
+    `Sales Method`,
+    COUNT(*) AS Num_Orders,
+    SUM(`Operating Profit`) AS Profit,
+    SUM(`Total Sales`) AS Revenue,
+    ROUND(SUM(`Operating Profit`) * 100.0 / NULLIF(SUM(`Total Sales`), 0), 2) AS Profit_Percent,
+    ROUND(SUM(`Total Sales`) * 100.0 / (SELECT SUM(`Total Sales`) FROM adidas), 2) AS Revenue_Percent
 FROM adidas
-GROUP BY `SALES METHOD`
-ORDER BY REVENUE DESC;
+GROUP BY `Sales Method`
+ORDER BY Revenue DESC;
 
--- ########################
--- # PRODUCT PERFORMANCE #
--- ########################
+-- Summary by Retailer
+SELECT 
+    Retailer,
+    COUNT(*) AS Num_Orders,
+    SUM(`Operating Profit`) AS Profit,
+    SUM(`Total Sales`) AS Revenue,
+    ROUND(SUM(`Operating Profit`) * 100.0 / NULLIF(SUM(`Total Sales`), 0), 2) AS Profit_Percent,
+    ROUND(SUM(`Total Sales`) * 100.0 / (SELECT SUM(`Total Sales`) FROM adidas), 2) AS Revenue_Percent
+FROM adidas
+GROUP BY Retailer
+ORDER BY Revenue DESC;
 
--- Top Products by Sales Channel
+-- ====================================
+-- 7. PRODUCT PERFORMANCE ANALYSIS
+-- ====================================
+
+-- Top 3 products by sales method
 WITH Ranked_Products AS (
     SELECT 
-        `SALES METHOD`,
+        `Sales Method`,
         Product,
-        COUNT(*) AS ORDER_NUM,
-        SUM(`TOTAL SALES`) AS REVENUE,
-        ROUND(AVG(`Operating Margin`),2) AS AVG_PROFIT,
-        SUM(`Operating Profit`) AS PROFIT,
+        COUNT(*) AS Order_Num,
+        SUM(`Total Sales`) AS Revenue,
+        ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+        SUM(`Operating Profit`) AS Profit,
         DENSE_RANK() OVER (
-            PARTITION BY `SALES METHOD` 
-            ORDER BY SUM(`TOTAL SALES`) DESC
-        ) AS RANKS
+            PARTITION BY `Sales Method` 
+            ORDER BY SUM(`Total Sales`) DESC
+        ) AS Cur_rank
     FROM adidas
-    GROUP BY `SALES METHOD`, Product
+    GROUP BY `Sales Method`, Product
 )
 SELECT 
-    `SALES METHOD`, 
-    Product, 
-    ORDER_NUM,
-    AVG_PROFIT,
-    PROFIT,
-    REVENUE
+    `Sales Method`, Product, Order_Num, Avg_Profit, Profit, Revenue
 FROM Ranked_Products
-WHERE RANKS <= 3
-ORDER BY REVENUE DESC;
+WHERE Cur_rank <= 3
+ORDER BY Revenue DESC;
 
--- ##########################
--- # GEOGRAPHIC ANALYSIS #
--- ##########################
+-- Product-wide performance summary
+SELECT 
+    Product,
+    SUM(`Units Sold`) AS Sold_Num,
+    SUM(`Operating Profit`) AS Profit,
+    SUM(`Total Sales`) AS Revenue,
+    ROUND(SUM(`Operating Profit`) * 100.0 / NULLIF(SUM(`Total Sales`), 0), 2) AS Profit_Percent
+FROM adidas
+GROUP BY Product
+ORDER BY Revenue DESC;
 
--- State-Level Performance
-WITH TOTAL_ORDER_COUNT AS (
-    SELECT COUNT(*) AS ORDER_COUNTS FROM adidas
+-- ================================
+-- 8. REGIONAL SALES PERFORMANCE
+-- ================================
+
+-- Revenue and profit by region
+SELECT 
+    Region,
+    SUM(`Operating Profit`) AS Profit,
+    SUM(`Total Sales`) AS Revenue,
+    ROUND(SUM(`Operating Profit`) * 100.0 / NULLIF(SUM(`Total Sales`), 0), 2) AS Profit_Percent
+FROM adidas
+GROUP BY Region
+ORDER BY Revenue DESC;
+
+-- =========================
+-- 9. STATE-LEVEL INSIGHTS
+-- =========================
+
+-- Performance by state
+WITH Total_Order_Count AS (
+    SELECT COUNT(*) AS Order_Counts FROM adidas
 ),
-TOTAL_REVENUE AS (
-    SELECT SUM(`TOTAL SALES`) AS SALES FROM adidas
+Total_Revenue AS (
+    SELECT SUM(`Total Sales`) AS Total_Sales FROM adidas
 )
 SELECT 
     State,
-    COUNT(*) AS NUM_ORDERS,
-    ROUND(COUNT(*) / (SELECT ORDER_COUNTS FROM TOTAL_ORDER_COUNT), 2)*100 AS PERCENT,
-    ROUND(AVG(`Operating Margin`), 2) AS AVG_PROFIT,
-    SUM(`TOTAL SALES`) AS REVENUE,
-    SUM(`Operating Profit`) AS PROFIT,
-    ROUND(SUM(`TOTAL SALES`) / (SELECT SALES FROM TOTAL_REVENUE), 2)*100 AS REV_PERCENT
+    COUNT(*) AS Num_Orders,
+    ROUND(COUNT(*) / (SELECT Order_Counts FROM Total_Order_Count), 2)*100 AS Order_Percent,
+    ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+    SUM(`Total Sales`) AS Revenue,
+    SUM(`Operating Profit`) AS Profit,
+    ROUND(SUM(`Total Sales`) / (SELECT Total_Sales FROM Total_Revenue), 2)*100 AS Revenue_Percent
 FROM adidas
 GROUP BY State
-ORDER BY REVENUE DESC;
+ORDER BY Revenue DESC;
 
--- ########################
--- # TEMPORAL ANALYSIS #
--- ########################
-
--- Monthly Sales Trends
+-- State performance in the 'West' region
 SELECT 
-    MONTH(`Invoice Date`) AS MONTH,
-    COUNT(*) AS NUM_ORDERS,
-    SUM(`Operating Profit`) AS PROFIT,
-    ROUND(AVG(`Operating Margin`), 2) AS AVG_PROFIT,
-    SUM(`TOTAL SALES`) AS REVENUE
+    State,
+    COUNT(*) AS Num_Orders,
+    ROUND(COUNT(*) / (SELECT COUNT(*) FROM adidas WHERE Region = 'West'), 2)*100 AS Order_Percent,
+    ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+    SUM(`Total Sales`) AS Revenue,
+    SUM(`Operating Profit`) AS Profit,
+    ROUND(SUM(`Total Sales`) / (SELECT SUM(`Total Sales`) FROM adidas WHERE Region = 'West'), 2)*100 AS Revenue_Percent
 FROM adidas
-GROUP BY MONTH
-ORDER BY REVENUE DESC;
+WHERE Region = 'West'
+GROUP BY State
+ORDER BY Revenue DESC;
 
--- Yearly Sales Trends
+-- ===============================
+-- 10. TEMPORAL (MONTHLY/YEARLY) TRENDS
+-- ===============================
+
+-- Monthly sales overview
 SELECT 
-    YEAR(`Invoice Date`) AS YEAR,
-    COUNT(*) AS NUM_ORDERS,
-    SUM(`Operating Profit`) AS PROFIT,
-    ROUND(AVG(`Operating Margin`), 2) AS AVG_PROFIT,
-    SUM(`TOTAL SALES`) AS REVENUE
+    MONTH(`Invoice Date`) AS Month,
+    COUNT(*) AS Num_Orders,
+    SUM(`Units Sold`) AS Num_Pieces,
+    SUM(`Operating Profit`) AS Profit,
+    ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+    SUM(`Total Sales`) AS Revenue
 FROM adidas
-GROUP BY YEAR
-ORDER BY REVENUE DESC;
+GROUP BY Month
+ORDER BY Revenue DESC;
 
--- ###########################
--- # REGIONAL ANALYSIS #
--- ###########################
+-- Monthly revenue with MoM % change
+WITH MonthlySales AS (
+    SELECT 
+        MONTH(`Invoice Date`) AS Month,
+        COUNT(*) AS Num_Orders,
+        SUM(`Units Sold`) AS Num_Pieces,
+        SUM(`Operating Profit`) AS Profit,
+        SUM(`Total Sales`) AS Revenue,
+        LAG(SUM(`Total Sales`)) OVER (ORDER BY MIN(`Invoice Date`)) AS Prev_Revenue,
+        ROUND((SUM(`Total Sales`) - LAG(SUM(`Total Sales`)) OVER (ORDER BY MIN(`Invoice Date`))) * 100.0 / 
+              NULLIF(LAG(SUM(`Total Sales`)) OVER (ORDER BY MIN(`Invoice Date`)), 0), 2) AS MoM_Change_Percent
+    FROM adidas
+    GROUP BY Month
+)
+SELECT * FROM MonthlySales
+ORDER BY Revenue DESC;
 
--- Regional Performance Breakdown
-WITH TOTAL_ORDER_COUNT AS (
-    SELECT COUNT(*) AS ORDER_COUNTS FROM adidas
+-- Online sales by month (MoM trends)
+WITH MonthlySales AS (
+    SELECT 
+        YEAR(`Invoice Date`) AS Year,
+        MONTH(`Invoice Date`) AS Month,
+        COUNT(*) AS Num_Orders,
+        SUM(`Units Sold`) AS Num_Pieces,
+        SUM(`Operating Profit`) AS Profit,
+        SUM(`Total Sales`) AS Revenue,
+        LAG(SUM(`Total Sales`)) OVER (ORDER BY YEAR(`Invoice Date`), MONTH(`Invoice Date`)) AS Prev_Revenue,
+        ROUND((SUM(`Total Sales`) - LAG(SUM(`Total Sales`)) OVER (ORDER BY YEAR(`Invoice Date`), MONTH(`Invoice Date`))) * 100.0 / 
+              NULLIF(LAG(SUM(`Total Sales`)) OVER (ORDER BY YEAR(`Invoice Date`), MONTH(`Invoice Date`)), 0), 2) AS MoM_Change_Percent
+    FROM adidas
+    WHERE `Sales Method` = 'online'
+    GROUP BY Year, Month
+)
+SELECT * FROM MonthlySales
+ORDER BY Revenue DESC;
+
+-- Yearly sales summary
+SELECT 
+    YEAR(`Invoice Date`) AS Year,
+    COUNT(*) AS Num_Orders,
+    SUM(`Operating Profit`) AS Profit,
+    ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+    SUM(`Total Sales`) AS Revenue
+FROM adidas
+GROUP BY Year
+ORDER BY Revenue DESC;
+
+-- ===============================
+-- 11. REGIONAL RANKING ANALYSIS
+-- ===============================
+
+-- Regional overview with ranking
+WITH Total_Order_Count AS (
+    SELECT COUNT(*) AS Order_Counts FROM adidas
 ),
-TOTAL_REVENUE AS (
-    SELECT SUM(`TOTAL SALES`) AS SALES FROM adidas
+Total_Revenue AS (
+    SELECT SUM(`Total Sales`) AS Total_Sales FROM adidas
 )
 SELECT 
     Region,
-    COUNT(*) AS NUM_ORDERS,
-    ROUND(COUNT(*) / (SELECT ORDER_COUNTS FROM TOTAL_ORDER_COUNT), 2)*100 AS ORD_NUM_PERCENT,
-    ROUND(AVG(`Operating Margin`), 2) AS AVG_PROFIT,
-    SUM(`TOTAL SALES`) AS REVENUE,
-    SUM(`Operating Profit`) AS PROFIT,
-    ROUND(SUM(`TOTAL SALES`) / (SELECT SALES FROM TOTAL_REVENUE), 2)*100 AS REV_PERCENT
+    COUNT(*) AS Num_Orders,
+    ROUND(COUNT(*) / (SELECT Order_Counts FROM Total_Order_Count), 2)*100 AS Order_Percent,
+    ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+    SUM(`Total Sales`) AS Revenue,
+    SUM(`Operating Profit`) AS Profit,
+    ROUND(SUM(`Total Sales`) / (SELECT Total_Sales FROM Total_Revenue), 2)*100 AS Revenue_Percent
 FROM adidas
 GROUP BY Region
-ORDER BY REVENUE DESC;
+ORDER BY Revenue DESC;
 
--- Top States by Region
-WITH Ranked_region AS (
+-- Top 3 states per region
+WITH Ranked_Region AS (
     SELECT 
         Region,
         State,
-        COUNT(*) AS ORDER_NUM,
-        SUM(`TOTAL SALES`) AS REVENUE,
-        ROUND(AVG(`Operating Margin`), 2) AS AVG_PROFIT,
-        SUM(`Operating Profit`) AS PROFIT,
-        DENSE_RANK() OVER (
-            PARTITION BY Region 
-            ORDER BY SUM(`TOTAL SALES`) DESC
-        ) AS RANKS
+        COUNT(*) AS Order_Num,
+        SUM(`Total Sales`) AS Revenue,
+        ROUND(AVG(`Operating Margin`), 2) AS Avg_Profit,
+        SUM(`Operating Profit`) AS Profit,
+        DENSE_RANK() OVER (PARTITION BY Region ORDER BY SUM(`Total Sales`) DESC) AS cur_Rank
     FROM adidas
     GROUP BY Region, State
 )
 SELECT 
-    Region,
-    State,
-    ORDER_NUM,
-    AVG_PROFIT,
-    PROFIT,
-    REVENUE
-FROM Ranked_region
-WHERE RANKS <= 3
-ORDER BY REVENUE DESC;
+    Region, State, Order_Num, Avg_Profit, Profit, Revenue
+FROM Ranked_Region
+WHERE cur_Rank <= 3
+ORDER BY Revenue DESC;
 
--- Re-enable safe update mode
+-- ============================
+-- RE-ENABLE SAFE MODE
+-- ============================
 SET SQL_SAFE_UPDATES = 1;
