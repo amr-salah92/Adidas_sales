@@ -84,11 +84,9 @@ The analysis reveals key insights into Adidas' sales performance:
 - Men Street Footwear products had the highest Average profit margins (40%) compared to men athlete footwear (34%).
 - The highest profit-generating region was the South 42%.
 
----
-
-
 ![Screenshot_26-7-2025_225119_chat deepseek com](https://github.com/user-attachments/assets/bbd59785-3bb1-49a4-bfce-91b7d5277493)
 
+---
 
 **Recommendations**
 
