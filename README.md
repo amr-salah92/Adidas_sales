@@ -85,7 +85,9 @@ The analysis reveals key insights into Adidas' sales performance:
 - The highest profit-generating region was the South 42%.
 
 ---
-![Screenshot_16-2-2025_195421_chatgpt com](https://github.com/user-attachments/assets/fc8354fd-ae0d-457d-90eb-c361e689f6a2)
+
+![Screenshot_26-7-2025_22359_chat deepseek com](https://github.com/user-attachments/assets/452382f6-3216-4246-bf75-2aea77b64c6b)
+
 
 **Recommendations**
 
