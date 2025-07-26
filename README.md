@@ -86,7 +86,8 @@ The analysis reveals key insights into Adidas' sales performance:
 
 ---
 
-![Screenshot_26-7-2025_22359_chat deepseek com](https://github.com/user-attachments/assets/452382f6-3216-4246-bf75-2aea77b64c6b)
+
+![Screenshot_26-7-2025_225119_chat deepseek com](https://github.com/user-attachments/assets/bbd59785-3bb1-49a4-bfce-91b7d5277493)
 
 
 **Recommendations**
