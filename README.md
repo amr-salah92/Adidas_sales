@@ -86,6 +86,71 @@ The analysis reveals key insights into Adidas' sales performance:
 
 ![Screenshot_26-7-2025_225119_chat deepseek com](https://github.com/user-attachments/assets/bbd59785-3bb1-49a4-bfce-91b7d5277493)
 
+
+## Business Q&A
+
+## 1. Regional Sales Performance
+**Q1: Which region generated the highest revenue, and what was its contribution?**  
+**A:** The West region was the top performer, contributing **$269.9M (30% of total revenue)**. California alone drove 7% of national sales, with peak demand in July.
+
+**Q2: Why did the Midwest underperform despite high population density?**  
+**A:** While the Midwest had **19% of total orders**, it generated only **15% of revenue ($135.8M)**. Potential factors include lower product penetration, weaker retailer partnerships, or regional preference for competitors.
+
+---
+
+## 2. Product Performance
+**Q3: What was the best-selling product category?**  
+**A:** Men’s Athletic Footwear led with **593K units sold**, contributing **$153.7M (17% of revenue)**. However, its profit margin (33.7%) was lower than other categories.
+
+**Q4: Why prioritize Women’s Street Footwear despite lower sales volume?**  
+**A:** This category achieved the **third-highest profit margin (35.2%)**. With strategic pricing adjustments, it could significantly boost profitability without high volume.
+
+---
+
+## 3. Sales Channel Efficiency
+**Q5: Which channel dominated sales, and what was its revenue share?**  
+**A:** In-store sales generated **40% of revenue ($356.6M)** across 1,740 orders. Outlets followed with **33% ($295.6M)**, while online contributed **27% ($247.7M)**.
+
+**Q6: When did online sales peak, and what does this imply?**  
+**A:** Online sales surged by **42% MoM in June 2021**, peaking in Q2. This indicates untapped digital growth potential, especially in underperforming regions like the South.
+
+---
+
+## 4. Profitability Analysis
+**Q7: Which product had the highest profit margin?**  
+**A:** Men’s Street Footwear achieved a **40% operating margin** – outperforming Men’s Athletic Footwear (33.7%). This justifies inventory reallocation to higher-margin products.
+
+**Q8: Which region was most profitable despite lower revenue?**  
+**A:** The South delivered the **highest profit margin (42.3%)**, generating **$61.1M profit from $144.7M revenue**. Alabama and Tennessee were key drivers with >45% margins.
+
+---
+
+## 5. Temporal Trends
+**Q9: Which months showed the strongest sales momentum?**  
+**A:** Top-performing months:  
+- **July**: $95.5M revenue (+27.7% MoM growth)  
+- **December**: $85.8M revenue (+26.5% MoM)  
+- **April**: $72.3M revenue (+27.3% MoM)  
+
+**Q10: How did 2021 performance compare to 2020?**  
+**A:** 2021 revenue **quadrupled YoY to $717.8M** (vs. $182.1M in 2020), with profit margins improving from 40.4% to 42.6%.
+
+---
+
+## 6. Retailer Performance
+**Q11: Which retailer delivered the highest revenue?**  
+**A:** West Gear generated **$243M (27% of revenue)**, followed by Foot Locker ($220M). Both outperformed Amazon ($77.7M) and Walmart ($74.6M).
+
+**Q12: Which retailer had the best profitability?**  
+**A:** Sports Direct achieved a **40.7% profit margin** – the highest among major retailers. Kohl’s (36.1%) and Walmart (34.6%) lagged in margin efficiency.
+
+---
+
+## 7. Strategic Recommendations
+- **Inventory Allocation**: Shift 15-20% of Midwest inventory to high-demand Western states (CA, WA).  
+- **Digital Expansion**: Invest $2M in targeted social ads in the South to boost online penetration.  
+- **Pricing Optimization**: Test 10-15% discounts on Women’s Street Footwear via bundle deals.  
+- **Seasonal Planning**: Pre-stock apparel before April/July/December demand surges.  
 ---
 
 **Recommendations**
